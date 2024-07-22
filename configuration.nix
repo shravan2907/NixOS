@@ -118,7 +118,10 @@
     tlp
     discord
     piper
-    google-chrome
+    google-chrome 
+    github-desktop
+    go
+    nodejs
   ];
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
