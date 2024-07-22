@@ -2,11 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
@@ -40,11 +41,11 @@
     LC_PAPER = "en_IN";
     LC_TELEPHONE = "en_IN";
     LC_TIME = "en_IN";
-  }; 
- # Enable the X11 windowing system.
+  };
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
- # Hyprland installation
+  # Hyprland installation
   programs.hyprland.enable = true;
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
@@ -79,12 +80,13 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  programs.fish.enable = true;
   users.users.shravan = {
     isNormalUser = true;
     description = "Shravan";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
@@ -93,34 +95,35 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    starship
     wget
     spotify
- #   zed-editor
+    pkgs-unstable.zed-editor
     jdk8
-   vscode
+    vscode
     qbittorrent
-   kodi
-   neovim
-   neofetch
-   cava
-   git
-   gcc
-   python3
-kitty
-tlp
-discord
-fish
-piper
+    kodi
+    neovim
+    neofetch
+    cava
+    git
+    gcc
+    python3
+    kitty
+    tlp
+    discord
+    piper
+    google-chrome
   ];
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
-environment.variables.EDITOR = "vim"; 
+  environment.variables.EDITOR = "vim";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
