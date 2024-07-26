@@ -122,6 +122,11 @@
     github-desktop
     go
     nodejs
+    pipenv
+    pipx
+    python311Packages.pip
+    speedtest-cli
+    yazi
   ];
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
