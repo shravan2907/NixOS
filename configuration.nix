@@ -43,13 +43,13 @@
     LC_TIME = "en_IN";
   };
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  #services.xserver.enable = true;
 
   # Hyprland installation
   programs.hyprland.enable = true;
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  #services.xserver.displayManager.gdm.enable = true;
+  #  services.xserver.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -89,6 +89,43 @@
       #  thunderbird
     ];
   };
+  #fractional scaling
+
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+
+    desktopManager.gnome.extraGSettingsOverridePackages = [
+      pkgs.gnome.mutter
+    ];
+
+    desktopManager.gnome.extraGSettingsOverrides = ''
+      [org.gnome.mutter]
+      experimental-features=['scale-monitor-framebuffer']
+    '';
+  };
+
+  users.users.nixos = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+  };
+
+  systemd.user.services.gnome-settings = {
+    description = "Apply GNOME settings for fractional scaling";
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = [
+        "${pkgs.glib}/bin/gsettings set org.gnome.mutter experimental-features \"['scale-monitor-framebuffer']\""
+        "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface scaling-factor 2"
+        "${pkgs.glib}/bin/gsettings set org.gnome.desktop.interface text-scaling-factor 1.0"
+      ];
+    };
+    wantedBy = [ "default.target" ];
+  };
+
+
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -127,6 +164,8 @@
     python311Packages.pip
     speedtest-cli
     yazi
+    whatsapp-for-linux
+    jetbrains.pycharm-professional
   ];
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
