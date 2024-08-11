@@ -145,7 +145,6 @@
     vscode
     qbittorrent
     kodi
-    neovim
     neofetch
     cava
     git
@@ -159,6 +158,7 @@
     github-desktop
     go
     nodejs
+    unzip
     pipenv
     pipx
     python311Packages.pip
@@ -166,6 +166,12 @@
     yazi
     whatsapp-for-linux
     jetbrains.pycharm-professional
+    ripgrep
+    entr 
+    zoxide
+    lua-language-server
+    wl-clipboard
+
   ];
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
