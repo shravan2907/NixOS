@@ -22,6 +22,25 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  # NVIDIA GPU DRIVERS
+  hardware.opengl = {
+    enable = true;
+  };
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
+
+  hardware.nvidia.prime = {
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId  = "PCI:1:0:0";
+  };
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -45,8 +64,14 @@
   # Enable the X11 windowing system.
   #services.xserver.enable = true;
 
+services.gnome.gnome-keyring.enable = true;
+programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
+
   # Hyprland installation
-  programs.hyprland.enable = true;
+#  programs.hyprland.enable = true;
   # Enable the GNOME Desktop Environment.
   #services.xserver.displayManager.gdm.enable = true;
   #  services.xserver.desktopManager.gnome.enable = true;
@@ -125,7 +150,9 @@
     wantedBy = [ "default.target" ];
   };
 
-
+  # For Fans issue
+  boot.kernelModules = ["coretemp"];
+  services.thermald.enable = true;
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -167,10 +194,13 @@
     whatsapp-for-linux
     jetbrains.pycharm-professional
     ripgrep
+    sway
     entr 
     zoxide
     lua-language-server
     wl-clipboard
+    inxi
+    lm_sensors
 
   ];
   fonts.packages = with pkgs; [
