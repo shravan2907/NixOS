@@ -201,6 +201,7 @@ programs.sway = {
     wl-clipboard
     inxi
     lm_sensors
+    jetbrains.idea-ultimate
 
   ];
   fonts.packages = with pkgs; [
